@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.post("/", protect, createTask);
 
-router.put("/:id", protect, updateTaskStatus);
+router.put("/:id/status", protect, updateTaskStatus);
 
 router.post("/:id/comment", protect, addComment);
 
