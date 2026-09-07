@@ -38,3 +38,28 @@ export const getProjects = async (req, res) => {
     });
   }
 };
+
+// DELETE PROJECT
+
+export const deleteProject = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found",
+      });
+    }
+
+    await Project.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "Project deleted successfully",
+      projectId: req.params.id,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

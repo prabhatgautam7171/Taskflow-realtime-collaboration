@@ -135,3 +135,67 @@ export const getTasks = async (req, res) => {
     });
   }
 };
+
+// UPDATE TASK
+
+export const updateTask = async (req, res) => {
+  try {
+    console.log("Update Task Request Body:", req.body); // Log the request body for debugging
+    const { title, description, status, assignedTo } = req.body;
+
+    const task = await Task.findById(req.params.id);
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Task not found",
+      });
+    }
+
+    // Update only fields that were provided
+    if (title !== undefined) task.title = title;
+    if (description !== undefined) task.description = description;
+    if (status !== undefined) task.status = status;
+    if (assignedTo !== undefined) task.assignedTo = assignedTo;
+
+    await task.save();
+
+    const updatedTask = await Task.findById(task._id)
+      .populate("assignedTo", "name email")
+      .populate("comments.user", "name email");
+
+    res.status(200).json(updatedTask);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+
+// DELETE TASK
+
+export const deleteTask = async (req, res) => {
+  try {
+    console.log("Delete Task Request Params:", req.params); // Log the request params for debugging
+    const task = await Task.findById(req.params.id);
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Task not found",
+      });
+    }
+
+    await Task.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "Task deleted successfully",
+      taskId: req.params.id,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

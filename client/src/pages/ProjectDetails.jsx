@@ -18,6 +18,8 @@ import TaskDetailsModal from "../components/TaskDetailsModal";
 
 import { useLocation } from "react-router-dom";
 
+import { Pencil, Trash2, Eye } from "lucide-react";
+
 const ProjectDetails = () => {
 
   const location = useLocation();
@@ -135,6 +137,50 @@ const ProjectDetails = () => {
     }
   };
 
+  const updateTaskHandler = async (taskId, taskData) => {
+    try {
+      const { data } = await api.put(
+        `/tasks/${taskId}`,
+        taskData,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      setTasks((prev) =>
+        prev.map((task) =>
+          task._id === taskId ? data : task
+        )
+      );
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const deleteTaskHandler = async (taskId) => {
+    try {
+      await api.delete(
+        `/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      setTasks((prev) =>
+        prev.filter((task) => task._id !== taskId)
+      );
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   // FETCH TASKS
   const fetchTasks = async () => {
@@ -152,6 +198,8 @@ const ProjectDetails = () => {
       console.log(error);
     }
   };
+
+
 
   const handleDragEnd = async (result) => {
 
@@ -303,7 +351,7 @@ const ProjectDetails = () => {
               <span className="text-white font-semibold">
                 {" "}tasks to tackle{" "}
               </span>
-               to
+              to
               <span className="ml-1 mr-1 text-green-400 font-semibold">
                 mission accomplished
               </span>
@@ -419,15 +467,46 @@ const ProjectDetails = () => {
 
                               )}
 
-                              <button
-                                onClick={() => {
-                                  setSelectedTask(task);
-                                  setIsTaskModalOpen(true);
-                                }}
-                                className="bg-slate-800 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl text-sm font-medium"
-                              >
-                                Details
-                              </button>
+                              <div className="flex items-center gap-2">
+
+                                <button
+                                  onClick={() =>
+                                    updateTaskHandler(task._id, {
+                                      title: prompt("Enter new title", task.title),
+                                      description: prompt(
+                                        "Enter new description",
+                                        task.description
+                                      ),
+                                    })
+                                  }
+                                  className="bg-blue-600 hover:bg-blue-700 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Pencil size={17} />
+
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm("Are you sure you want to delete this task?")) {
+                                      deleteTaskHandler(task._id);
+                                    }
+                                  }}
+                                  className="bg-red-600 hover:bg-red-700 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Trash2 size={17} />
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    setSelectedTask(task);
+                                    setIsTaskModalOpen(true);
+                                  }}
+                                  className="bg-slate-800 hover:bg-blue-600 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Eye size={17} />
+                                </button>
+
+                              </div>
 
                             </div>
 
@@ -558,15 +637,46 @@ const ProjectDetails = () => {
 
                               )}
 
-                              <button
-                                onClick={() => {
-                                  setSelectedTask(task);
-                                  setIsTaskModalOpen(true);
-                                }}
-                                className="bg-slate-800 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl text-sm font-medium"
-                              >
-                                Details
-                              </button>
+                              <div className="flex items-center gap-2">
+
+                                <button
+                                  onClick={() =>
+                                    updateTaskHandler(task._id, {
+                                      title: prompt("Enter new title", task.title),
+                                      description: prompt(
+                                        "Enter new description",
+                                        task.description
+                                      ),
+                                    })
+                                  }
+                                  className="bg-blue-600 hover:bg-blue-700 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Pencil size={17} />
+
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm("Are you sure you want to delete this task?")) {
+                                      deleteTaskHandler(task._id);
+                                    }
+                                  }}
+                                  className="bg-red-600 hover:bg-red-700 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Trash2 size={17} />
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    setSelectedTask(task);
+                                    setIsTaskModalOpen(true);
+                                  }}
+                                  className="bg-slate-800 hover:bg-blue-600 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Eye size={17} />
+                                </button>
+
+                              </div>
 
                             </div>
 
@@ -697,15 +807,46 @@ const ProjectDetails = () => {
 
                               )}
 
-                              <button
-                                onClick={() => {
-                                  setSelectedTask(task);
-                                  setIsTaskModalOpen(true);
-                                }}
-                                className="bg-slate-800 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl text-sm font-medium"
-                              >
-                                Details
-                              </button>
+                              <div className="flex items-center gap-2">
+
+                                <button
+                                  onClick={() =>
+                                    updateTaskHandler(task._id, {
+                                      title: prompt("Enter new title", task.title),
+                                      description: prompt(
+                                        "Enter new description",
+                                        task.description
+                                      ),
+                                    })
+                                  }
+                                  className="bg-blue-600 hover:bg-blue-700 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Pencil size={17} />
+
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm("Are you sure you want to delete this task?")) {
+                                      deleteTaskHandler(task._id);
+                                    }
+                                  }}
+                                  className="bg-red-600 hover:bg-red-700 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Trash2 size={17} />
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    setSelectedTask(task);
+                                    setIsTaskModalOpen(true);
+                                  }}
+                                  className="bg-slate-800 hover:bg-blue-600 transition-all px-4 py-2 rounded-4xl text-sm font-medium"
+                                >
+                                  <Eye size={17} />
+                                </button>
+
+                              </div>
 
                             </div>
 
