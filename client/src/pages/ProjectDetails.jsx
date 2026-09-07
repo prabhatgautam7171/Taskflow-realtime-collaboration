@@ -224,7 +224,7 @@ const ProjectDetails = () => {
     try {
 
       await api.put(
-        `/tasks/${taskId}`,
+        `/tasks/${taskId}/status`,
         {
           status: newStatus,
         },
